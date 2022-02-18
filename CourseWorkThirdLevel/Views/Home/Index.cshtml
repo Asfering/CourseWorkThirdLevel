@@ -5,12 +5,6 @@
 
 <div>
     <h3>Имя юзера</h3>
-    <table>
-        @foreach (CourseWorkThirdLevel.User u in Model)
-        {
-            <tr>
-                <td><p>@u.FirstName</p></td>
-            </tr>
-                }
-        </table>
-    </div>
+    <p>@ViewBag.Id</p>
+    @Html.ActionLink("Профиль","GetProfile","Profile", new { Id= ViewBag.Id}, null)
+</div>

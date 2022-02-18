@@ -12,9 +12,22 @@ namespace CourseWorkThirdLevel.Controllers
 
         public ActionResult Index()
         {
-            return View(ent.Users);
+            User user = null;
+            if (User.Identity.IsAuthenticated)
+            {
+                user = ent.Users.Where(u => u.UserLogin == User.Identity.Name).FirstOrDefault();
+                // var us = ent.Users.SqlQuery("select * from Users").ToList();
+                ViewBag.Id = user.Id;
+            }
+            /*
+            string result = "Вы не авторизованы";
+            User user = null;
+            
+            return result;*/
+            return View();
         }
 
+        [Authorize]
         public ActionResult About()
         {
             ViewBag.Message = "Your application description page.";

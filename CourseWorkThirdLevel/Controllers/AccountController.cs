@@ -19,8 +19,8 @@ namespace CourseWorkThirdLevel.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Register(RegisterModel model)
-        {
-            if (ModelState.IsValid)
+        { 
+            if (ModelState.IsValid) 
             {
                 User user = null;
                 using (Kurs3Entities db = new Kurs3Entities())
@@ -83,6 +83,11 @@ namespace CourseWorkThirdLevel.Controllers
             }
 
             return View(model);
+        }
+        public ActionResult Logoff()
+        {
+            FormsAuthentication.SignOut();
+            return RedirectToAction("Index", "Home");
         }
     }
 }

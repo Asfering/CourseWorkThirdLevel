@@ -1,0 +1,20 @@
+﻿
+@{
+    ViewBag.Title = "GetProfile";
+}
+
+<h2>GetProfile</h2>
+
+<p>ID профиля - @ViewBag.Id</p>
+<p>Твой ID - @ViewBag.YourId</p>
+
+<table>
+    <tr>
+        @foreach(var element in ViewBag.Documents)
+            {
+                <td>@element.Id</td>
+                <td>@element.Title</td>
+            }
+    </tr>
+</table>
+
