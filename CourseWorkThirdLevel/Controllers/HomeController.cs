@@ -8,9 +8,11 @@ namespace CourseWorkThirdLevel.Controllers
 {
     public class HomeController : Controller
     {
+        Kurs3Entities ent = new Kurs3Entities();
+
         public ActionResult Index()
         {
-            return View();
+            return View(ent.Users);
         }
 
         public ActionResult About()
@@ -25,6 +27,12 @@ namespace CourseWorkThirdLevel.Controllers
             ViewBag.Message = "Your contact page.";
 
             return View();
+        }
+
+        protected override void Dispose(bool disposing)
+        {
+            ent.Dispose();
+            base.Dispose(disposing);
         }
     }
 }
