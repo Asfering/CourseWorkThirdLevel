@@ -1,0 +1,18 @@
+﻿
+@{
+    ViewBag.Title = "AllDocuments";
+}
+
+<h2>AllDocuments</h2>
+
+<table>
+    <td>
+        @foreach (var item in ViewBag.Document)
+        {
+        <tr>@Html.ActionLink($"{item.Title}", "GetDocument", "Document", new { Id = item.Id }, null)</tr>
+        <tr>Вступление в силу @item.DateStart</tr>
+        <tr>Дата окончания действия  @item.DateEnd</tr>
+    }
+        </td>
+    </table>
+

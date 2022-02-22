@@ -6,5 +6,6 @@
 <div>
     <h3>Имя юзера</h3>
     <p>@ViewBag.Id</p>
-    @Html.ActionLink("Профиль","GetProfile","Profile", new { Id= ViewBag.Id}, null)
+    @Html.ActionLink("Профиль", "GetProfile", "Profile", new { Id = ViewBag.Id }, null)
+    @Html.ActionLink("Выйти из профиля", "Logoff", "Account")
 </div>

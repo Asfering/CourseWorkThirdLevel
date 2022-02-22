@@ -9,12 +9,35 @@
 <p>Твой ID - @ViewBag.YourId</p>
 
 <table>
-    <tr>
-        @foreach(var element in ViewBag.Documents)
+        <tr>
+
+            @foreach (var element in ViewBag.DocFavorites)
             {
                 <td>@element.Id</td>
                 <td>@element.Title</td>
             }
-    </tr>
+        </tr>
+        <tr>
+
+            @foreach (var element in ViewBag.DocEvaluations)
+            {
+                <td>@element.Id</td>
+                <td>@element.Title</td>
+                <td>@element.UsId</td>
+                <td>@element.LikeUnlike</td>
+            }
+        </tr>
+
+        <tr>
+            @foreach (var element in ViewBag.DocComments)
+            {
+                <td>@element.Id</td>
+                <td>@element.UsId</td>
+                <td>@element.Likes</td>
+                <td>@element.Dislikes</td>
+                <td>@element.IdComment</td>
+                <td>@element.Comment</td>
+            }
+        </tr>
 </table>
 

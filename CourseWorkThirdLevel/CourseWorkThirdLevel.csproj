@@ -239,6 +239,7 @@
       <DependentUpon>DbWork.tt</DependentUpon>
     </Compile>
     <Compile Include="Controllers\AccountController.cs" />
+    <Compile Include="Controllers\DocumentController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ProfileController.cs" />
     <Compile Include="DbWork.Context.cs">
@@ -268,7 +269,7 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="Models\DocumentClass.cs" />
+    <Compile Include="Models\DocumentModel.cs" />
     <Compile Include="Models\RegLog.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="sysdiagram.cs">
@@ -334,6 +335,8 @@
     <Content Include="Views\Account\Register.cshtml" />
     <Content Include="Views\Account\Login.cshtml" />
     <Content Include="Views\Profile\GetProfile.cshtml" />
+    <Content Include="Views\Document\AllDocuments.cshtml" />
+    <Content Include="Views\Document\GetDocument.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

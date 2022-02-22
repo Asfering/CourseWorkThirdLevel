@@ -12,7 +12,8 @@ namespace CourseWorkThirdLevel.Controllers
     {
         Kurs3Entities ent = new Kurs3Entities();
 
-        [Route("{id}")]
+        [Route("Profile/{id}")]
+        [Authorize]
         public ActionResult GetProfile(int? id)
         {
             /*var documents = from d in ent.Documents
@@ -21,17 +22,7 @@ namespace CourseWorkThirdLevel.Controllers
                             select new DocumentClass { d.Id, d.Title } ;
             */
 
-            /*var documents = ent.Documents.Join(ent.Favorites,
-                d => d.Id,
-                f => f.IdDocument,
-                (d, f) => new DocumentClass
-                {
-                    UserId = f.IdUser,
-                    Id = d.Id,
-                    Title = d.Title
-                }).Where(e => e.UserId == id);
 
-            ViewBag.Documents = documents;*/
 
             /*foreach(var did in documents)
             {
@@ -55,20 +46,64 @@ namespace CourseWorkThirdLevel.Controllers
             //ViewBag.FavoritesId = ent.Documents.SqlQuery("Select Id from Documents " +
             //   $"inner join Favorites on Favorites.IdDocument = Id where Favorites.IdUser = {id}").ToList();
 
-            var doc = ent.Database.SqlQuery<Document>($"Select * from Documents inner join Favorites on Favorites.IdDocument = Id where Favorites.IdUser = {id}").ToList();
+            /*var documents = ent.Documents.Join(ent.Favorites,
+               d => d.Id,
+               f => f.IdDocument,
+               (d, f) => new DocumentClass
+               {
+                   UserId = f.IdUser,
+                   Id = d.Id,
+                   Title = d.Title
+               }).Where(e => e.UserId == id);
 
-            ViewBag.Documents = doc;
+           ViewBag.Documents = documents;*/
 
             User user = null;
             if (User.Identity.IsAuthenticated)
             {
-                user = ent.Users.Where(u => u.UserLogin == User.Identity.Name).FirstOrDefault();
-                // var us = ent.Users.SqlQuery("select * from Users").ToList();
+                // id - ID пользователя, владельца профиля
+                user = ent.Users.Where(u => u.UserLogin == User.Identity.Name).FirstOrDefault();    // получение твоего профиля
+                // Достаем понравившиеся пользователю документы
+                var docFavorites = ent.Database.SqlQuery<Document>($"Select * from Documents inner join Favorites on Favorites.IdDocument = Id where Favorites.IdUser = {id}").ToList();
+                // Достает оценки пользователя
+                var docEvaluations = ent.Documents.Join(ent.Evaluations,
+                    d => d.Id,
+                    e => e.IdDocument,
+                    (d, e) => new DocumentModel
+                    {
+                        Id = d.Id,
+                        Title = d.Title,
+                        UsId = e.IdUser,
+                        LikeUnlike = e.LikeUnlike
+                    }
+                    ).Where(e=>e.UsId == id).ToList();
+                // Достаем комментарии пользователя
+                var docComments = ent.Documents.Join(ent.Comments,
+                    d => d.Id,
+                    e => e.IdDocument,
+                    (d, e) => new DocumentModel
+                    {
+                        Id = d.Id,
+                        Title = d.Title,
+                        UsId = e.IdUser,
+                        Likes = e.Likes,
+                        Dislikes = e.Dislikes,
+                        IdComment = e.Id,
+                        Comment = e.Msg,
+                    }
+                    ).Where(e => e.UsId == id).ToList();
+
+                ViewBag.DocEvaluations = docEvaluations;
+                ViewBag.DocFavorites = docFavorites;
+                ViewBag.DocComments = docComments;
                 ViewBag.YourId = user.Id;
+                ViewBag.Id = id;
+                
             }
-
-            ViewBag.Id = id;
-
+            else
+            {
+                return RedirectToAction("Login", "Account");
+            }
 
             return View();
         }

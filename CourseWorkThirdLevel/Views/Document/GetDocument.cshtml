@@ -1,0 +1,22 @@
+﻿
+@{
+    ViewBag.Title = ViewBag.TitleDoc;
+}
+
+<h2>@ViewBag.TitleDoc</h2>
+<table>
+    <tr>
+        @foreach (var item in ViewBag.Document)
+        {
+            <td>@item.Texts</td>
+            <td>Понравилось @item.Likes</td>
+            <td>Не понравилось @item.Dislikes</td>
+            <td>В избранном @item.Favorites</td>
+            <td>Дата публикации - @item.DatePublish</td>
+            <td>Вступление в силу @item.DateStart</td>
+            <td>Дата окончания действия  @item.DateEnd</td>
+        }
+    </tr>
+    </table>
+
+
