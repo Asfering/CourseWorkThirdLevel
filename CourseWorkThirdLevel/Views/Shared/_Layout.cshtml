@@ -4,7 +4,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>@ViewBag.Title - приложение ASP.NET</title>
+    <title>@ViewBag.Title - FinDocs</title>
     @Styles.Render("~/Content/css")
     @Scripts.Render("~/bundles/modernizr")
 </head>
@@ -17,14 +17,25 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                @Html.ActionLink("Имя приложения", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })
+                @Html.ActionLink("FinDocs", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })
             </div>
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
-                    <li>@Html.ActionLink("Домашняя страница", "Index", "Home")</li>
-                    <li>@Html.ActionLink("Информация", "About", "Home")</li>
-                    <li>@Html.ActionLink("Связаться", "Contact", "Home")</li>
-                </ul>
+                    @if (User.Identity.IsAuthenticated)
+                    {
+                        Kurs3Entities ent = new Kurs3Entities();
+                        User user = null;
+                        user = ent.Users.Where(u => u.UserLogin == User.Identity.Name).FirstOrDefault();
+                        <li>@Html.ActionLink(user.FirstName, "GetProfile", "Profile", new { Id = user.Id }, null)</li>
+                        <li>@Html.ActionLink("Информация", "About", "Home")</li>
+                        <li>@Html.ActionLink("Выйти", "Logoff", "Account")</li>
+                        }
+                        else
+                        {
+                        <li>@Html.ActionLink("Войти", "Login", "Account")</li>
+                        <li>@Html.ActionLink("Информация", "About", "Home")</li>
+                        }
+                    </ul>
             </div>
         </div>
     </div>
@@ -32,7 +43,7 @@
         @RenderBody()
         <hr />
         <footer>
-            <p>&copy; @DateTime.Now.Year - мое приложение ASP.NET</p>
+            <p>&copy; @DateTime.Now.Year - FinDocs</p>
         </footer>
     </div>
 

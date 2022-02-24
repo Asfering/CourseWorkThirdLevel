@@ -1,23 +1,93 @@
 ﻿
 @{
-    ViewBag.Title = "GetProfile";
+    ViewBag.Title = ViewBag.YourName;
 }
 
-<h2>GetProfile</h2>
+<h2>@ViewBag.YourName</h2>
 
-<p>ID профиля - @ViewBag.Id</p>
-<p>Твой ID - @ViewBag.YourId</p>
+<div class="container">
+    <div class="row">
+        <div class="col-md-2">
+            <table>
+                <caption>Избранное</caption>
+                @foreach (var element in ViewBag.DocFavorites)
+                {
+                <tr><td>@Html.ActionLink($"{element.Title}", "GetDocument", "Document", new { Id = element.Id }, null)</td></tr>
+                }
+            </table>
+        </div>
+        <div class="col-md-7">
+            <table style="width:90%">
+                <caption>Комментарии @ViewBag.YourName</caption>
+
+                @foreach (var element in ViewBag.DocComments)
+                {
+                    <tr>
+                        <td style="border-top:1px solid grey; border-left:1px solid grey; border-right:1px solid grey">@Html.ActionLink($"{element.Title}", "GetDocument", "Document", new { Id = element.Id }, null)</td>
+                    </tr>
+                    <tr>
+                        <td style="border-left:1px solid grey; border-right:1px solid grey">@element.Comment</td>
+                    </tr>
+                    <tr>
+                        <td style="border-left:1px solid grey; border-right:1px solid grey; border-bottom:1px solid grey">L - @element.Likes | DL - @element.Dislikes | @element.DatePublish</td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                    </tr>
+                    }
+
+
+                </table>
+            @*@foreach (var element in ViewBag.DocComments)
+            {
+
+                <p>@Html.ActionLink($"{element.Title}", "GetDocument", "Document", new { Id = element.Id }, null)</p>
+                <p>@element.Comment</p>
+                <p>L - @element.Likes | DL - @element.Dislikes</p>
+                <p>@element.DatePublish</p>
+                <br />
+            }*@
+        </div>
+        @* тут надо подумать*@
+        <div class="col-md-3">
+            <table style="width:100%; border: 1px solid grey">
+                <caption>Оценки</caption>
+                <tr><th style="border: 1px solid grey">Понравилось</th> <th style="border: 1px solid grey">Не понравилось</thstyle="border:></tr>
+                @foreach(var element in ViewBag.DocEvaluations)
+                {
+                <tr>
+                        @if (element.LikeUnlike) 
+                        {
+                    <td style="border: 1px solid grey">@Html.ActionLink($"{ element.Title}", "GetDocument", "Document", new { Id = element.Id }, null);</td>
+                    <td style="border: 1px solid grey"></td>    
+                    }
+                    
+                        @if (!element.LikeUnlike)
+                        {
+                <td style="border: 1px solid grey"></td>
+                            <td style="border: 1px solid grey"> 
+                    @Html.ActionLink($"{ element.Title}", "GetDocument", "Document", new { Id = element.Id }, null);
+                </td>
+                
+                    }
+                
+                </tr>
+                }
+            </table>
+        </div>
+    </div>
+</div>
 
 <table>
-        <tr>
+        @*<tr>
 
             @foreach (var element in ViewBag.DocFavorites)
             {
                 <td>@element.Id</td>
                 <td>@element.Title</td>
             }
-        </tr>
-        <tr>
+        </tr>*@
+        @*<tr>
 
             @foreach (var element in ViewBag.DocEvaluations)
             {
@@ -26,9 +96,9 @@
                 <td>@element.UsId</td>
                 <td>@element.LikeUnlike</td>
             }
-        </tr>
+        </tr>*@
 
-        <tr>
+        @*<tr>
             @foreach (var element in ViewBag.DocComments)
             {
                 <td>@element.Id</td>
@@ -38,6 +108,6 @@
                 <td>@element.IdComment</td>
                 <td>@element.Comment</td>
             }
-        </tr>
+        </tr>*@
 </table>
 

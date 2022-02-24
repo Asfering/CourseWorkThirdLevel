@@ -62,7 +62,11 @@ namespace CourseWorkThirdLevel.Controllers
             if (User.Identity.IsAuthenticated)
             {
                 // id - ID пользователя, владельца профиля
-                user = ent.Users.Where(u => u.UserLogin == User.Identity.Name).FirstOrDefault();    // получение твоего профиля
+                //user = ent.Users.Where(u => u.UserLogin == User.Identity.Name).FirstOrDefault();    // получение твоего профиля
+                // получаем текущего пользователя
+                // Сделать проверку, является ли ID числом. И так везде!
+
+                var currentUser = ent.Users.SqlQuery($"Select * from Users where Users.Id = {id}").ToList();
                 // Достаем понравившиеся пользователю документы
                 var docFavorites = ent.Database.SqlQuery<Document>($"Select * from Documents inner join Favorites on Favorites.IdDocument = Id where Favorites.IdUser = {id}").ToList();
                 // Достает оценки пользователя
@@ -81,7 +85,7 @@ namespace CourseWorkThirdLevel.Controllers
                 var docComments = ent.Documents.Join(ent.Comments,
                     d => d.Id,
                     e => e.IdDocument,
-                    (d, e) => new DocumentModel
+                    (d, e) => new CommentModel
                     {
                         Id = d.Id,
                         Title = d.Title,
@@ -90,14 +94,15 @@ namespace CourseWorkThirdLevel.Controllers
                         Dislikes = e.Dislikes,
                         IdComment = e.Id,
                         Comment = e.Msg,
+                        DatePublish = e.DatePublish
                     }
                     ).Where(e => e.UsId == id).ToList();
 
                 ViewBag.DocEvaluations = docEvaluations;
                 ViewBag.DocFavorites = docFavorites;
                 ViewBag.DocComments = docComments;
-                ViewBag.YourId = user.Id;
-                ViewBag.Id = id;
+                ViewBag.YourName = currentUser[0].FirstName + " " + currentUser[0].SecondName;
+                ViewBag.Id = currentUser[0].Id;
                 
             }
             else

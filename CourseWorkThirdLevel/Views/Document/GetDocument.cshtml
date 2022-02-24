@@ -1,10 +1,31 @@
 ﻿
 @{
-    ViewBag.Title = ViewBag.TitleDoc;
+    ViewBag.Title = @ViewBag.Document[0].Title;
 }
 
-<h2>@ViewBag.TitleDoc</h2>
-<table>
+<h2>@ViewBag.Document[0].Title</h2>
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-10" style="border:1px solid grey">
+            @ViewBag.Document[0].Texts
+        </div>
+        <div class="col-md-2">
+            <p>Дата публикации - @ViewBag.Document[0].DatePublish</p>
+            <p>Дата вступления в силу - @ViewBag.Document[0].DateStart</p>
+            @if (ViewBag.Document[0].DateEnd != null)
+            {
+                <p>Дата окончания действия - @ViewBag.Document[0].DateEnd</p>
+            }
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-1">
+
+        </div>
+    </div>
+</div>
+@*<table>
     <tr>
         @foreach (var item in ViewBag.Document)
         {
@@ -19,4 +40,19 @@
     </tr>
     </table>
 
+<table>
+    <tr>
+        @foreach (var item in ViewBag.Comments)
+        {
+            <td>@item.Id</td>
+            <td>Заголовок документа @item.Title</td>
+            <td>UsId @item.UsId</td>
+            <td>UsName @item.UsName</td>
+            <td>Comment @item.Comment</td>
+            <td>Понравилось @item.Likes</td>
+            <td>Не понравилось @item.Dislikes</td>
+            <td>Дата публикации - @item.DatePublish</td>
+        }
+    </tr>
+</table>*@
 
