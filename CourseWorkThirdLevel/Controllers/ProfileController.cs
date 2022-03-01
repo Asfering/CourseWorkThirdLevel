@@ -16,101 +16,66 @@ namespace CourseWorkThirdLevel.Controllers
         [Authorize]
         public ActionResult GetProfile(int? id)
         {
-            /*var documents = from d in ent.Documents
-                            join f in ent.Favorites on d.Id equals f.IdDocument
-                            where f.IdUser == id
-                            select new DocumentClass { d.Id, d.Title } ;
-            */
-
-
-
-            /*foreach(var did in documents)
+            try
             {
-                Console.WriteLine(did.Id + " " + did.Title);
-            }*/
-
-
-            /*var FavTitle = ent.Documents.Join(ent.Favorites,
-                d => d.Id,
-                f => f.IdDocument,
-                (d, f) => new
+                User user = null;
+                if (User.Identity.IsAuthenticated)
                 {
-                    Id = d.Id,
-                    Title = d.Title
-                });
-            
-            ViewBag.Favorites = FavTitle;*/
-            //ViewBag.FavoritesTitle = ent.Database.ExecuteSqlCommand($"Select Title from Documents inner join Favorites on Favorites.IdDocument = Id where Favorites.IdUser = {id}");
-            //ViewBag.FavoritesTitle = ent.Documents.SqlQuery("Select Title from Documents inner join Favorites on Favorites.IdDocument = Id where Favorites.IdUser = 2").ToList();
+                    // id - ID пользователя, владельца профиля
+                    //user = ent.Users.Where(u => u.UserLogin == User.Identity.Name).FirstOrDefault();    // получение твоего профиля
+                    // получаем текущего пользователя
+                    // Сделать проверку, является ли ID числом. И так везде!
 
-            //ViewBag.FavoritesId = ent.Documents.SqlQuery("Select Id from Documents " +
-            //   $"inner join Favorites on Favorites.IdDocument = Id where Favorites.IdUser = {id}").ToList();
+                    var currentUser = ent.Users.SqlQuery($"Select * from Users where Users.Id = {id}").ToList();
+                    // Достаем понравившиеся пользователю документы
+                    var docFavorites = ent.Database.SqlQuery<Document>($"Select * from Documents inner join Favorites on Favorites.IdDocument = Id where Favorites.IdUser = {id}").ToList();
+                    // Достает оценки пользователя
+                    var docEvaluations = ent.Documents.Join(ent.Evaluations,
+                        d => d.Id,
+                        e => e.IdDocument,
+                        (d, e) => new DocumentModel
+                        {
+                            Id = d.Id,
+                            Title = d.Title,
+                            UsId = e.IdUser,
+                            LikeUnlike = e.LikeUnlike
+                        }
+                        ).Where(e => e.UsId == id).ToList();
+                    // Достаем комментарии пользователя
+                    var docComments = ent.Documents.Join(ent.Comments,
+                        d => d.Id,
+                        e => e.IdDocument,
+                        (d, e) => new CommentModel
+                        {
+                            Id = d.Id,
+                            Title = d.Title,
+                            UsId = e.IdUser,
+                            Likes = e.Likes,
+                            Dislikes = e.Dislikes,
+                            IdComment = e.Id,
+                            Comment = e.Msg,
+                            DatePublish = e.DatePublish
+                        }
+                        ).Where(e => e.UsId == id).ToList();
 
-            /*var documents = ent.Documents.Join(ent.Favorites,
-               d => d.Id,
-               f => f.IdDocument,
-               (d, f) => new DocumentClass
-               {
-                   UserId = f.IdUser,
-                   Id = d.Id,
-                   Title = d.Title
-               }).Where(e => e.UserId == id);
+                    ViewBag.DocEvaluations = docEvaluations;
+                    ViewBag.DocFavorites = docFavorites;
+                    ViewBag.DocComments = docComments;
+                    ViewBag.YourName = currentUser[0].FirstName + " " + currentUser[0].SecondName;
+                    ViewBag.Id = currentUser[0].Id;
 
-           ViewBag.Documents = documents;*/
+                }
+                else
+                {
+                    return RedirectToAction("Login", "Account");
+                }
 
-            User user = null;
-            if (User.Identity.IsAuthenticated)
-            {
-                // id - ID пользователя, владельца профиля
-                //user = ent.Users.Where(u => u.UserLogin == User.Identity.Name).FirstOrDefault();    // получение твоего профиля
-                // получаем текущего пользователя
-                // Сделать проверку, является ли ID числом. И так везде!
-
-                var currentUser = ent.Users.SqlQuery($"Select * from Users where Users.Id = {id}").ToList();
-                // Достаем понравившиеся пользователю документы
-                var docFavorites = ent.Database.SqlQuery<Document>($"Select * from Documents inner join Favorites on Favorites.IdDocument = Id where Favorites.IdUser = {id}").ToList();
-                // Достает оценки пользователя
-                var docEvaluations = ent.Documents.Join(ent.Evaluations,
-                    d => d.Id,
-                    e => e.IdDocument,
-                    (d, e) => new DocumentModel
-                    {
-                        Id = d.Id,
-                        Title = d.Title,
-                        UsId = e.IdUser,
-                        LikeUnlike = e.LikeUnlike
-                    }
-                    ).Where(e=>e.UsId == id).ToList();
-                // Достаем комментарии пользователя
-                var docComments = ent.Documents.Join(ent.Comments,
-                    d => d.Id,
-                    e => e.IdDocument,
-                    (d, e) => new CommentModel
-                    {
-                        Id = d.Id,
-                        Title = d.Title,
-                        UsId = e.IdUser,
-                        Likes = e.Likes,
-                        Dislikes = e.Dislikes,
-                        IdComment = e.Id,
-                        Comment = e.Msg,
-                        DatePublish = e.DatePublish
-                    }
-                    ).Where(e => e.UsId == id).ToList();
-
-                ViewBag.DocEvaluations = docEvaluations;
-                ViewBag.DocFavorites = docFavorites;
-                ViewBag.DocComments = docComments;
-                ViewBag.YourName = currentUser[0].FirstName + " " + currentUser[0].SecondName;
-                ViewBag.Id = currentUser[0].Id;
-                
+                return View();
             }
-            else
+            catch
             {
-                return RedirectToAction("Login", "Account");
+                return RedirectToAction("Index", "Home");
             }
-
-            return View();
         }
     }
 }

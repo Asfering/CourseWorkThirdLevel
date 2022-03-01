@@ -17,6 +17,7 @@ namespace CourseWorkThirdLevel
         public int IdUser { get; set; }
         public int IdDocument { get; set; }
         public Nullable<bool> tech { get; set; }
+        public int IdFav { get; set; }
     
         public virtual Document Document { get; set; }
         public virtual User User { get; set; }

@@ -9,15 +9,15 @@
         <EntityTypeShape EntityType="DataModel.Document" Width="1.5" PointX="3.75" PointY="8.375" IsExpanded="true" />
         <EntityTypeShape EntityType="DataModel.sysdiagram" Width="1.5" PointX="0.75" PointY="0.75" IsExpanded="true" />
         <EntityTypeShape EntityType="DataModel.User" Width="1.5" PointX="0.75" PointY="4" IsExpanded="true" />
-        <EntityTypeShape EntityType="DataModel.Evaluation" Width="1.5" PointX="6" PointY="4.375" IsExpanded="true" />
-        <EntityTypeShape EntityType="DataModel.Favorite" Width="1.5" PointX="6" PointY="1.375" IsExpanded="true" />
         <AssociationConnector Association="DataModel.FK_Master_Documents" ManuallyRouted="false" />
         <AssociationConnector Association="DataModel.FK_Master_Users" ManuallyRouted="false" />
-        <AssociationConnector Association="DataModel.FK_Favorites_Documents" ManuallyRouted="false" />
-        <AssociationConnector Association="DataModel.FK_Kurs3_Documents" ManuallyRouted="false" />
-        <AssociationConnector Association="DataModel.FK_Favorites_Users" ManuallyRouted="false" />
-        <AssociationConnector Association="DataModel.FK_Kurs3_Users" ManuallyRouted="false" />
-      </Diagram>
+        <EntityTypeShape EntityType="DataModel.Evaluation" Width="1.5" PointX="6" PointY="3.75" />
+        <EntityTypeShape EntityType="DataModel.Favorite" Width="1.5" PointX="6" PointY="6.75" />
+        <AssociationConnector Association="DataModel.FK_Favorites_Documents" />
+        <AssociationConnector Association="DataModel.FK_Kurs3_Documents" />
+        <AssociationConnector Association="DataModel.FK_Kurs3_Users" />
+        <AssociationConnector Association="DataModel.FK_Favorites_Users" />
+        </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>
 </edmx:Edmx>

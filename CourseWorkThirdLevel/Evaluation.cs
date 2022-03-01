@@ -17,6 +17,7 @@ namespace CourseWorkThirdLevel
         public int IdUser { get; set; }
         public int IdDocument { get; set; }
         public Nullable<bool> LikeUnlike { get; set; }
+        public int IdEval { get; set; }
     
         public virtual Document Document { get; set; }
         public virtual User User { get; set; }

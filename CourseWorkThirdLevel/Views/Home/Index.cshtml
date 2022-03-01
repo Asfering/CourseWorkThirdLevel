@@ -1,11 +1,14 @@
 ﻿@model IEnumerable<CourseWorkThirdLevel.User>
 @{
-    ViewBag.Title = "Home Page";
+    ViewBag.Title = "Главная";
 }
 
-<div>
-    <h3>Имя юзера</h3>
-    <p>@ViewBag.Id</p>
-    @Html.ActionLink("Профиль", "GetProfile", "Profile", new { Id = ViewBag.Id }, null)
-    @Html.ActionLink("Выйти из профиля", "Logoff", "Account")
+<div style="height:100%">
+    <div class="container">
+        <div class="row height d-flex justify-content-center align-items-center">
+            <div class="col-md-12">
+                <div class="search"> <i class="fa fa-search"></i> <input type="text" class="f-control" placeholder="Найти документ..."> <button class="btn btn-primary">Поиск</button> </div>
+            </div>
+        </div>
+    </div>
 </div>

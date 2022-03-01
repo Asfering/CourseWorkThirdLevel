@@ -4,7 +4,7 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-      <Schema Namespace="Хранилище DataModel" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+    <Schema Namespace="Хранилище DataModel" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
         <EntityType Name="Comments">
           <Key>
             <PropertyRef Name="Id" />
@@ -31,27 +31,23 @@
           <Property Name="DateEnd" Type="smalldatetime" />
           <Property Name="Favorites" Type="int" />
         </EntityType>
-        <!--Ошибки, обнаруженные при создании:
-предупреждение 6002: В таблице или представлении "Kurs3.dbo.Evaluations" не определен первичный ключ. Ключ был выведен, а определение таблицы или представления было создано в режиме только для чтения.-->
         <EntityType Name="Evaluations">
           <Key>
-            <PropertyRef Name="IdUser" />
-            <PropertyRef Name="IdDocument" />
+            <PropertyRef Name="IdEval" />
           </Key>
           <Property Name="IdUser" Type="int" Nullable="false" />
           <Property Name="IdDocument" Type="int" Nullable="false" />
           <Property Name="LikeUnlike" Type="bit" />
+          <Property Name="IdEval" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
         </EntityType>
-        <!--Ошибки, обнаруженные при создании:
-предупреждение 6002: В таблице или представлении "Kurs3.dbo.Favorites" не определен первичный ключ. Ключ был выведен, а определение таблицы или представления было создано в режиме только для чтения.-->
         <EntityType Name="Favorites">
           <Key>
-            <PropertyRef Name="IdUser" />
-            <PropertyRef Name="IdDocument" />
+            <PropertyRef Name="IdFav" />
           </Key>
           <Property Name="IdUser" Type="int" Nullable="false" />
           <Property Name="IdDocument" Type="int" Nullable="false" />
           <Property Name="tech" Type="bit" />
+          <Property Name="IdFav" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
         </EntityType>
         <EntityType Name="sysdiagrams">
           <Key>
@@ -148,22 +144,10 @@
         <EntityContainer Name="Хранилище DataModelContainer">
           <EntitySet Name="Comments" EntityType="Self.Comments" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Documents" EntityType="Self.Documents" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Evaluations" EntityType="Self.Evaluations" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Favorites" EntityType="Self.Favorites" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Users" EntityType="Self.Users" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="Evaluations" EntityType="Self.Evaluations" store:Type="Tables" store:Schema="dbo">
-            <DefiningQuery>SELECT 
-    [Evaluations].[IdUser] AS [IdUser], 
-    [Evaluations].[IdDocument] AS [IdDocument], 
-    [Evaluations].[LikeUnlike] AS [LikeUnlike]
-    FROM [dbo].[Evaluations] AS [Evaluations]</DefiningQuery>
-          </EntitySet>
-          <EntitySet Name="Favorites" EntityType="Self.Favorites" store:Type="Tables" store:Schema="dbo">
-            <DefiningQuery>SELECT 
-    [Favorites].[IdUser] AS [IdUser], 
-    [Favorites].[IdDocument] AS [IdDocument], 
-    [Favorites].[tech] AS [tech]
-    FROM [dbo].[Favorites] AS [Favorites]</DefiningQuery>
-          </EntitySet>
           <AssociationSet Name="FK_Favorites_Documents" Association="Self.FK_Favorites_Documents">
             <End Role="Documents" EntitySet="Documents" />
             <End Role="Favorites" EntitySet="Favorites" />
@@ -189,8 +173,7 @@
             <End Role="Comments" EntitySet="Comments" />
           </AssociationSet>
         </EntityContainer>
-      </Schema>
-    </edmx:StorageModels>
+      </Schema></edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="DataModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
@@ -222,8 +205,8 @@
           <Property Name="DateEnd" Type="DateTime" Precision="0" />
           <Property Name="Favorites" Type="Int32" />
           <NavigationProperty Name="Comments" Relationship="Self.FK_Master_Documents" FromRole="Documents" ToRole="Comments" />
-          <NavigationProperty Name="Favorites1" Relationship="Self.FK_Favorites_Documents" FromRole="Documents" ToRole="Favorites" />
-          <NavigationProperty Name="Evaluations" Relationship="Self.FK_Kurs3_Documents" FromRole="Documents" ToRole="Evaluations" />
+          <NavigationProperty Name="Favorites1" Relationship="DataModel.FK_Favorites_Documents" FromRole="Document" ToRole="Favorite" />
+          <NavigationProperty Name="Evaluations" Relationship="DataModel.FK_Kurs3_Documents" FromRole="Document" ToRole="Evaluation" />
         </EntityType>
         <EntityType Name="sysdiagram">
           <Key>
@@ -245,30 +228,8 @@
           <Property Name="FirstName" Type="String" MaxLength="20" FixedLength="false" Unicode="true" Nullable="false" />
           <Property Name="SecondName" Type="String" MaxLength="30" FixedLength="false" Unicode="true" Nullable="false" />
           <NavigationProperty Name="Comments" Relationship="Self.FK_Master_Users" FromRole="Users" ToRole="Comments" />
-          <NavigationProperty Name="Favorites" Relationship="Self.FK_Favorites_Users" FromRole="Users" ToRole="Favorites" />
-          <NavigationProperty Name="Evaluations" Relationship="Self.FK_Kurs3_Users" FromRole="Users" ToRole="Evaluations" />
-        </EntityType>
-        <EntityType Name="Evaluation">
-          <Key>
-            <PropertyRef Name="IdUser" />
-            <PropertyRef Name="IdDocument" />
-          </Key>
-          <Property Name="IdUser" Type="Int32" Nullable="false" />
-          <Property Name="IdDocument" Type="Int32" Nullable="false" />
-          <Property Name="LikeUnlike" Type="Boolean" />
-          <NavigationProperty Name="Document" Relationship="Self.FK_Kurs3_Documents" FromRole="Evaluations" ToRole="Documents" />
-          <NavigationProperty Name="User" Relationship="Self.FK_Kurs3_Users" FromRole="Evaluations" ToRole="Users" />
-        </EntityType>
-        <EntityType Name="Favorite">
-          <Key>
-            <PropertyRef Name="IdUser" />
-            <PropertyRef Name="IdDocument" />
-          </Key>
-          <Property Name="IdUser" Type="Int32" Nullable="false" />
-          <Property Name="IdDocument" Type="Int32" Nullable="false" />
-          <Property Name="tech" Type="Boolean" />
-          <NavigationProperty Name="Document" Relationship="Self.FK_Favorites_Documents" FromRole="Favorites" ToRole="Documents" />
-          <NavigationProperty Name="User" Relationship="Self.FK_Favorites_Users" FromRole="Favorites" ToRole="Users" />
+          <NavigationProperty Name="Evaluations" Relationship="DataModel.FK_Kurs3_Users" FromRole="User" ToRole="Evaluation" />
+          <NavigationProperty Name="Favorites" Relationship="DataModel.FK_Favorites_Users" FromRole="User" ToRole="Favorite" />
         </EntityType>
         <Association Name="FK_Master_Documents">
           <End Role="Documents" Type="Self.Document" Multiplicity="1" />
@@ -294,61 +255,11 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_Favorites_Documents">
-          <End Role="Documents" Type="Self.Document" Multiplicity="1" />
-          <End Role="Favorites" Type="Self.Favorite" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Documents">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="Favorites">
-              <PropertyRef Name="IdDocument" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_Kurs3_Documents">
-          <End Role="Documents" Type="Self.Document" Multiplicity="1" />
-          <End Role="Evaluations" Type="Self.Evaluation" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Documents">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="Evaluations">
-              <PropertyRef Name="IdDocument" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_Favorites_Users">
-          <End Role="Users" Type="Self.User" Multiplicity="1" />
-          <End Role="Favorites" Type="Self.Favorite" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Users">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="Favorites">
-              <PropertyRef Name="IdUser" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_Kurs3_Users">
-          <End Role="Users" Type="Self.User" Multiplicity="1" />
-          <End Role="Evaluations" Type="Self.Evaluation" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Users">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="Evaluations">
-              <PropertyRef Name="IdUser" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <EntityContainer Name="Kurs3Entities" annotation:LazyLoadingEnabled="true">
           <EntitySet Name="Comments" EntityType="Self.Comment" />
           <EntitySet Name="Documents" EntityType="Self.Document" />
           <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagram" />
           <EntitySet Name="Users" EntityType="Self.User" />
-          <EntitySet Name="Evaluations" EntityType="Self.Evaluation" />
-          <EntitySet Name="Favorites" EntityType="Self.Favorite" />
           <AssociationSet Name="FK_Master_Documents" Association="Self.FK_Master_Documents">
             <End Role="Documents" EntitySet="Documents" />
             <End Role="Comments" EntitySet="Comments" />
@@ -357,23 +268,95 @@
             <End Role="Users" EntitySet="Users" />
             <End Role="Comments" EntitySet="Comments" />
           </AssociationSet>
-          <AssociationSet Name="FK_Favorites_Documents" Association="Self.FK_Favorites_Documents">
-            <End Role="Documents" EntitySet="Documents" />
-            <End Role="Favorites" EntitySet="Favorites" />
+          <EntitySet Name="Evaluations" EntityType="DataModel.Evaluation" />
+          <EntitySet Name="Favorites" EntityType="DataModel.Favorite" />
+          <AssociationSet Name="FK_Favorites_Documents" Association="DataModel.FK_Favorites_Documents">
+            <End Role="Document" EntitySet="Documents" />
+            <End Role="Favorite" EntitySet="Favorites" />
           </AssociationSet>
-          <AssociationSet Name="FK_Kurs3_Documents" Association="Self.FK_Kurs3_Documents">
-            <End Role="Documents" EntitySet="Documents" />
-            <End Role="Evaluations" EntitySet="Evaluations" />
+          <AssociationSet Name="FK_Kurs3_Documents" Association="DataModel.FK_Kurs3_Documents">
+            <End Role="Document" EntitySet="Documents" />
+            <End Role="Evaluation" EntitySet="Evaluations" />
           </AssociationSet>
-          <AssociationSet Name="FK_Favorites_Users" Association="Self.FK_Favorites_Users">
-            <End Role="Users" EntitySet="Users" />
-            <End Role="Favorites" EntitySet="Favorites" />
+          <AssociationSet Name="FK_Kurs3_Users" Association="DataModel.FK_Kurs3_Users">
+            <End Role="User" EntitySet="Users" />
+            <End Role="Evaluation" EntitySet="Evaluations" />
           </AssociationSet>
-          <AssociationSet Name="FK_Kurs3_Users" Association="Self.FK_Kurs3_Users">
-            <End Role="Users" EntitySet="Users" />
-            <End Role="Evaluations" EntitySet="Evaluations" />
+          <AssociationSet Name="FK_Favorites_Users" Association="DataModel.FK_Favorites_Users">
+            <End Role="User" EntitySet="Users" />
+            <End Role="Favorite" EntitySet="Favorites" />
           </AssociationSet>
-        </EntityContainer>
+          </EntityContainer>
+        <EntityType Name="Evaluation">
+          <Key>
+            <PropertyRef Name="IdEval" />
+          </Key>
+          <Property Name="IdUser" Type="Int32" Nullable="false" />
+          <Property Name="IdDocument" Type="Int32" Nullable="false" />
+          <Property Name="LikeUnlike" Type="Boolean" />
+          <Property Name="IdEval" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <NavigationProperty Name="Document" Relationship="DataModel.FK_Kurs3_Documents" FromRole="Evaluation" ToRole="Document" />
+          <NavigationProperty Name="User" Relationship="DataModel.FK_Kurs3_Users" FromRole="Evaluation" ToRole="User" />
+        </EntityType>
+        <EntityType Name="Favorite">
+          <Key>
+            <PropertyRef Name="IdFav" />
+          </Key>
+          <Property Name="IdUser" Type="Int32" Nullable="false" />
+          <Property Name="IdDocument" Type="Int32" Nullable="false" />
+          <Property Name="tech" Type="Boolean" />
+          <Property Name="IdFav" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <NavigationProperty Name="Document" Relationship="DataModel.FK_Favorites_Documents" FromRole="Favorite" ToRole="Document" />
+          <NavigationProperty Name="User" Relationship="DataModel.FK_Favorites_Users" FromRole="Favorite" ToRole="User" />
+        </EntityType>
+        <Association Name="FK_Favorites_Documents">
+          <End Type="DataModel.Document" Role="Document" Multiplicity="1" />
+          <End Type="DataModel.Favorite" Role="Favorite" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Document">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Favorite">
+              <PropertyRef Name="IdDocument" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Kurs3_Documents">
+          <End Type="DataModel.Document" Role="Document" Multiplicity="1" />
+          <End Type="DataModel.Evaluation" Role="Evaluation" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Document">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Evaluation">
+              <PropertyRef Name="IdDocument" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Kurs3_Users">
+          <End Type="DataModel.User" Role="User" Multiplicity="1" />
+          <End Type="DataModel.Evaluation" Role="Evaluation" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="User">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Evaluation">
+              <PropertyRef Name="IdUser" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Favorites_Users">
+          <End Type="DataModel.User" Role="User" Multiplicity="1" />
+          <End Type="DataModel.Favorite" Role="Favorite" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="User">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Favorite">
+              <PropertyRef Name="IdUser" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -433,18 +416,20 @@
           <EntitySetMapping Name="Evaluations">
             <EntityTypeMapping TypeName="DataModel.Evaluation">
               <MappingFragment StoreEntitySet="Evaluations">
-                <ScalarProperty Name="IdUser" ColumnName="IdUser" />
-                <ScalarProperty Name="IdDocument" ColumnName="IdDocument" />
+                <ScalarProperty Name="IdEval" ColumnName="IdEval" />
                 <ScalarProperty Name="LikeUnlike" ColumnName="LikeUnlike" />
+                <ScalarProperty Name="IdDocument" ColumnName="IdDocument" />
+                <ScalarProperty Name="IdUser" ColumnName="IdUser" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="Favorites">
             <EntityTypeMapping TypeName="DataModel.Favorite">
               <MappingFragment StoreEntitySet="Favorites">
-                <ScalarProperty Name="IdUser" ColumnName="IdUser" />
-                <ScalarProperty Name="IdDocument" ColumnName="IdDocument" />
+                <ScalarProperty Name="IdFav" ColumnName="IdFav" />
                 <ScalarProperty Name="tech" ColumnName="tech" />
+                <ScalarProperty Name="IdDocument" ColumnName="IdDocument" />
+                <ScalarProperty Name="IdUser" ColumnName="IdUser" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

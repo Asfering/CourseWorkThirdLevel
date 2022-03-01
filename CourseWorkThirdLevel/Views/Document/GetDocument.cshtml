@@ -5,26 +5,94 @@
 
 <h2>@ViewBag.Document[0].Title</h2>
 
+@using (Html.BeginForm("GetDocument", "Document", FormMethod.Post))
+{
 <div class="container">
     <div class="row">
-        <div class="col-md-10" style="border:1px solid grey">
+        <div class="col-md-10">
+            @*Текст*@
             @ViewBag.Document[0].Texts
         </div>
         <div class="col-md-2">
+            @*Дата публикации*@
             <p>Дата публикации - @ViewBag.Document[0].DatePublish</p>
             <p>Дата вступления в силу - @ViewBag.Document[0].DateStart</p>
             @if (ViewBag.Document[0].DateEnd != null)
             {
                 <p>Дата окончания действия - @ViewBag.Document[0].DateEnd</p>
             }
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-md-1">
+
+            @*Лайки*@
+
+            @if (ViewBag.BoolEval == true)
+            {
+                if (ViewBag.AlreadyGetEval[0].LikeUnlike == true)
+                {
+                    <button name="action" value="UnLike" style="color:lightblue">UL @ViewBag.Document[0].Likes</button>
+                    <button name="action" disabled>UDL @ViewBag.Document[0].Dislikes</button>
+                }
+                else
+                {
+                    <button name="action" disabled>UL @ViewBag.Document[0].Likes</button>
+                    <button name="action" value="UnDislike" style="color:lightblue">UDL @ViewBag.Document[0].Dislikes</button>
+                }
+            }
+            else
+            {
+                <button name="action" value="Like">L @ViewBag.Document[0].Likes</button>
+                <button name="action" value="Dislike">DL @ViewBag.Document[0].Dislikes</button>
+            }
+
+
+            @*Избранное*@
+
+
+            @if (ViewBag.BoolFavorites == true)
+            {
+                <button name="action" value="DelFavorite">Убрать из избранного</button>
+            }
+            else
+            {
+                <button name="action" value="Favorite">Добавить в избранное</button>
+            }
 
         </div>
     </div>
+    <div class="row">
+        <div class="col-md-10">
+            <table style="width:90%">
+                @foreach (var element in ViewBag.Comments)
+                {
+                    <tr>
+                        <td style="border-top:1px solid grey; border-left:1px solid grey; border-right:1px solid grey">@Html.ActionLink($"{element.UsName}", "GetProfile", "Profile", new { Id = element.UsId }, null)</td>
+                    </tr>
+                    <tr>
+                        <td style="border-left:1px solid grey; border-right:1px solid grey">@element.Comment</td>
+                    </tr>
+                    <tr>
+                        <td style="color:grey; border-left:1px solid grey; border-right:1px solid grey; border-bottom:1px solid grey">
+                            @element.DatePublish
+                            @*@if (element.UsId == ViewBag.YourId)
+                    {
+                        <button name="action" style="color:black" value="DeleteComment" id="@element.Id">Удалить</button>
+                    }*@
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>&nbsp;</td>
+                    </tr>
+                }
+            </table>
+            @*Тут какая-то херня с шириной*@
+            @if (User.Identity.IsAuthenticated) { 
+            <textarea style="width:90%; height:61px; resize:none"  placeholder="Введите комментарий макс. 100 символов" maxlength="100" name="txtArea">
+                            </textarea>
+            <button name="action" value="Comment">Отправить</button>
+            }
+        </div>
+    </div>
 </div>
+}
 @*<table>
     <tr>
         @foreach (var item in ViewBag.Document)

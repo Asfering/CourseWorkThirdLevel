@@ -29,85 +29,28 @@
                         <td style="border-left:1px solid grey; border-right:1px solid grey">@element.Comment</td>
                     </tr>
                     <tr>
-                        <td style="border-left:1px solid grey; border-right:1px solid grey; border-bottom:1px solid grey">L - @element.Likes | DL - @element.Dislikes | @element.DatePublish</td>
+                        <td style="color:grey; border-left:1px solid grey; border-right:1px solid grey; border-bottom:1px solid grey">@element.DatePublish</td>
                     </tr>
                     <tr>
-                        <td></td>
+                        <td>&nbsp;</td>
                     </tr>
                     }
-
-
-                </table>
-            @*@foreach (var element in ViewBag.DocComments)
-            {
-
-                <p>@Html.ActionLink($"{element.Title}", "GetDocument", "Document", new { Id = element.Id }, null)</p>
-                <p>@element.Comment</p>
-                <p>L - @element.Likes | DL - @element.Dislikes</p>
-                <p>@element.DatePublish</p>
-                <br />
-            }*@
+            </table>
         </div>
-        @* тут надо подумать*@
         <div class="col-md-3">
             <table style="width:100%; border: 1px solid grey">
-                <caption>Оценки</caption>
-                <tr><th style="border: 1px solid grey">Понравилось</th> <th style="border: 1px solid grey">Не понравилось</thstyle="border:></tr>
+                <caption>Понравилось</caption>
                 @foreach(var element in ViewBag.DocEvaluations)
                 {
-                <tr>
+                    <tr>
                         @if (element.LikeUnlike) 
                         {
-                    <td style="border: 1px solid grey">@Html.ActionLink($"{ element.Title}", "GetDocument", "Document", new { Id = element.Id }, null);</td>
-                    <td style="border: 1px solid grey"></td>    
-                    }
-                    
-                        @if (!element.LikeUnlike)
-                        {
-                <td style="border: 1px solid grey"></td>
-                            <td style="border: 1px solid grey"> 
-                    @Html.ActionLink($"{ element.Title}", "GetDocument", "Document", new { Id = element.Id }, null);
-                </td>
-                
-                    }
-                
-                </tr>
+                            <td style="border: 1px solid grey">@Html.ActionLink($"{ element.Title}", "GetDocument", "Document", new { Id = element.Id }, null);</td>
+                        }
+                    </tr>
                 }
             </table>
         </div>
     </div>
 </div>
-
-<table>
-        @*<tr>
-
-            @foreach (var element in ViewBag.DocFavorites)
-            {
-                <td>@element.Id</td>
-                <td>@element.Title</td>
-            }
-        </tr>*@
-        @*<tr>
-
-            @foreach (var element in ViewBag.DocEvaluations)
-            {
-                <td>@element.Id</td>
-                <td>@element.Title</td>
-                <td>@element.UsId</td>
-                <td>@element.LikeUnlike</td>
-            }
-        </tr>*@
-
-        @*<tr>
-            @foreach (var element in ViewBag.DocComments)
-            {
-                <td>@element.Id</td>
-                <td>@element.UsId</td>
-                <td>@element.Likes</td>
-                <td>@element.Dislikes</td>
-                <td>@element.IdComment</td>
-                <td>@element.Comment</td>
-            }
-        </tr>*@
-</table>
 

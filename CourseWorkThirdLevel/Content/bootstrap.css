@@ -27,6 +27,41 @@ section,
 summary {
   display: block;
 }
+.height {
+    height: 580px;
+}
+
+.search {
+    position: relative;
+    box-shadow: 0 0 40px rgba(51, 51, 51, .1)
+}
+
+    .search input {
+        height: 60px;
+        margin-top:20%;
+        text-indent: 25px;
+        border: 2px solid #d6d4d4
+    }
+
+        .search input:focus {
+            box-shadow: none;
+            border: 2px solid blue
+        }
+
+    .search .fa-search {
+        position: absolute;
+        top: 20px;
+        left: 16px
+    }
+
+    .search button {
+        position: absolute;
+        top: 5px;
+        right: 5px;
+        height: 50px;
+        width: 110px;
+        background: blue
+    }
 audio,
 canvas,
 progress,
@@ -2655,7 +2690,71 @@ output {
   line-height: 1.42857143;
   color: #555555;
 }
+
 .form-control {
+    display: block;
+    width: 300px;
+    height: 34px;
+    padding: 6px 12px;
+    font-size: 14px;
+    line-height: 1.42857143;
+    color: #555555;
+    background-color: #fff;
+    background-image: none;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
+    box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
+    -webkit-transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
+    -o-transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
+    -webkit-transition: border-color ease-in-out .15s, -webkit-box-shadow ease-in-out .15s;
+    transition: border-color ease-in-out .15s, -webkit-box-shadow ease-in-out .15s;
+    transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
+    transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s, -webkit-box-shadow ease-in-out .15s;
+}
+
+    .form-control:focus {
+        border-color: #66afe9;
+        outline: 0;
+        -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075), 0 0 8px rgba(102, 175, 233, 0.6);
+        box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075), 0 0 8px rgba(102, 175, 233, 0.6);
+    }
+
+    .form-control::-moz-placeholder {
+        color: #999;
+        opacity: 1;
+    }
+
+    .form-control:-ms-input-placeholder {
+        color: #999;
+    }
+
+    .form-control::-webkit-input-placeholder {
+        color: #999;
+    }
+
+    .form-control::-ms-expand {
+        background-color: transparent;
+        border: 0;
+    }
+
+    .form-control[disabled],
+    .form-control[readonly],
+    fieldset[disabled] .form-control {
+        background-color: #eeeeee;
+        opacity: 1;
+    }
+
+    .form-control[disabled],
+    fieldset[disabled] .form-control {
+        cursor: not-allowed;
+    }
+    textarea.form-control {
+    height: auto;
+    }
+
+
+.f-control {
   display: block;
   width: 100%;
   height: 34px;
@@ -2676,37 +2775,37 @@ output {
   transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
   transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s, -webkit-box-shadow ease-in-out .15s;
 }
-.form-control:focus {
+.f-control:focus {
   border-color: #66afe9;
   outline: 0;
   -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075), 0 0 8px rgba(102, 175, 233, 0.6);
   box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075), 0 0 8px rgba(102, 175, 233, 0.6);
 }
-.form-control::-moz-placeholder {
+.f-control::-moz-placeholder {
   color: #999;
   opacity: 1;
 }
-.form-control:-ms-input-placeholder {
+.f-control:-ms-input-placeholder {
   color: #999;
 }
-.form-control::-webkit-input-placeholder {
+.f-control::-webkit-input-placeholder {
   color: #999;
 }
-.form-control::-ms-expand {
+.f-control::-ms-expand {
   background-color: transparent;
   border: 0;
 }
-.form-control[disabled],
-.form-control[readonly],
+.f-control[disabled],
+.f-control[readonly],
 fieldset[disabled] .form-control {
   background-color: #eeeeee;
   opacity: 1;
 }
-.form-control[disabled],
-fieldset[disabled] .form-control {
+.f-control[disabled],
+fieldset[disabled] .f-control {
   cursor: not-allowed;
 }
-textarea.form-control {
+textarea.f-control {
   height: auto;
 }
 @media screen and (-webkit-min-device-pixel-ratio: 0) {
