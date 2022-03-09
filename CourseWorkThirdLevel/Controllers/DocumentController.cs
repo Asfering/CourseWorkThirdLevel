@@ -1,4 +1,7 @@
-﻿using CourseWorkThirdLevel.Models;
+﻿using CommonServiceLocator;
+using CourseWorkThirdLevel.Models;
+using NUnit.Framework;
+using SolrNet;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,14 +15,46 @@ namespace CourseWorkThirdLevel.Controllers
 
         Kurs3Entities Entity = new Kurs3Entities();
         // GET: Document
-        [Route("Document/AllDocuments")]
+        [Route("AllDocuments")]
+        [Authorize]
         public ActionResult AllDocuments()
         {
             // заглушка, пока выводятся все документы
             var document = Entity.Documents.SqlQuery("Select * from Documents").ToList();
             ViewBag.Document = document;
+            StartSolr.StartEngine();        // подрубаем Solr
             return View();
         }
+
+
+        public void Add()           // Добавление элемента в Solr, тестирование
+        {
+            var p = new Document
+            {
+                Id=15,
+                Title="testing",
+                Texts="testingText",
+                Likes=1,
+                Dislikes=2,
+                DatePublish=DateTime.Now,
+                DateStart=DateTime.Now,
+                DateEnd=null,
+                Favorites=0
+            };
+
+            var solr = ServiceLocator.Current.GetInstance<ISolrOperations<Document>>();
+            solr.Add(p);
+            solr.Commit();
+        }
+
+        public void Query()             // тестовый запрос, Solr
+        {
+            ISolrOperations<Document> solr = ServiceLocator.Current.GetInstance<ISolrOperations<Document>>();
+            var results = solr.Query(new SolrQueryByField("Title", "testing"));
+            Console.WriteLine(results[0].Title);
+        }
+
+
 
         // Гет запрос
         [Route("Document/{id}")]
@@ -57,15 +92,6 @@ namespace CourseWorkThirdLevel.Controllers
                         idUs = f.IdUser,
                         idDoc = f.IdDocument
                     }).Where(w => w.idDoc == id && w.idUs == user.Id).ToList();
-
-                //var alreadyInFavorites = from us in Entity.Users                    // получаем, является ли элемент в избранном для данного пользователя
-                //                         join fav in Entity.Favorites on us.Id equals fav.IdUser
-                //                         where us.Id == user.Id && fav.IdDocument == id
-                //                         select new
-                //                         {
-                //                             idDoc = fav.IdDocument
-                //                         };
-
 
                 var alreadyGetEval = Entity.Evaluations.Join(Entity.Users,              // получаем какую оценку поставил пользователь данному документу       
                     e => e.IdUser,

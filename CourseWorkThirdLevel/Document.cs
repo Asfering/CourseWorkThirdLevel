@@ -9,6 +9,7 @@
 
 namespace CourseWorkThirdLevel
 {
+    using SolrNet.Attributes;
     using System;
     using System.Collections.Generic;
     
@@ -22,14 +23,23 @@ namespace CourseWorkThirdLevel
             this.Evaluations = new HashSet<Evaluation>();
         }
     
+        [SolrUniqueKey("Id")]
         public int Id { get; set; }
+        [SolrField("Title")]
         public string Title { get; set; }
+        [SolrField("Texts")]
         public string Texts { get; set; }
+        [SolrField("Likes")]
         public Nullable<int> Likes { get; set; }
+        [SolrField("Dislikes")]
         public Nullable<int> Dislikes { get; set; }
+        [SolrField("DatePublish")]
         public System.DateTime DatePublish { get; set; }
+        [SolrField("DateStart")]
         public System.DateTime DateStart { get; set; }
+        [SolrField("DateEnd")]
         public Nullable<System.DateTime> DateEnd { get; set; }
+        [SolrField("Favorites")]
         public Nullable<int> Favorites { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
