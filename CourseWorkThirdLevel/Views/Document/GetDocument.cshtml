@@ -15,11 +15,11 @@
         </div>
         <div class="col-md-2">
             @*Дата публикации*@
-            <p>Дата публикации - @ViewBag.Document[0].DatePublish</p>
-            <p>Дата вступления в силу - @ViewBag.Document[0].DateStart</p>
+            <p>Публикация от: @ViewBag.Document[0].DatePublish</p>
+            <p>Вступление в силу от: @ViewBag.Document[0].DateStart</p>
             @if (ViewBag.Document[0].DateEnd != null)
             {
-                <p>Дата окончания действия - @ViewBag.Document[0].DateEnd</p>
+                <p>Утрата силы:- @ViewBag.Document[0].DateEnd</p>
             }
 
             @*Лайки*@
@@ -28,19 +28,19 @@
             {
                 if (ViewBag.AlreadyGetEval[0].LikeUnlike == true)
                 {
-                    <button name="action" value="UnLike" style="color:lightblue">UL @ViewBag.Document[0].Likes</button>
-                    <button name="action" disabled>UDL @ViewBag.Document[0].Dislikes</button>
+                    <button name="action" value="UnLike" style="background: blue; color: white; margin-bottom: 5px;">UL @ViewBag.Document[0].Likes</button>
+                    <button name="action" disabled style="margin-bottom: 5px;">UDL @ViewBag.Document[0].Dislikes</button>
                 }
                 else
                 {
-                    <button name="action" disabled>UL @ViewBag.Document[0].Likes</button>
-                    <button name="action" value="UnDislike" style="color:lightblue">UDL @ViewBag.Document[0].Dislikes</button>
+                    <button name="action" disabled style="margin-bottom: 5px;">UL @ViewBag.Document[0].Likes</button>
+                    <button name="action" value="UnDislike" style="background:blue; color: white; margin-bottom: 5px;">UDL @ViewBag.Document[0].Dislikes</button>
                 }
             }
             else
             {
-                <button name="action" value="Like">L @ViewBag.Document[0].Likes</button>
-                <button name="action" value="Dislike">DL @ViewBag.Document[0].Dislikes</button>
+                <button name="action" value="Like" style="margin-bottom: 5px;">L @ViewBag.Document[0].Likes</button>
+                <button name="action" value="Dislike" style="margin-bottom: 5px;">DL @ViewBag.Document[0].Dislikes</button>
             }
 
 
@@ -49,11 +49,11 @@
 
             @if (ViewBag.BoolFavorites == true)
             {
-                <button name="action" value="DelFavorite">Убрать из избранного</button>
+                <button name="action" value="DelFavorite" style="margin-bottom: 5px;">Убрать из избранного</button>
             }
             else
             {
-                <button name="action" value="Favorite">Добавить в избранное</button>
+                <button name="action" value="Favorite" style="margin-bottom: 5px;">Добавить в избранное</button>
             }
 
         </div>
@@ -64,18 +64,14 @@
                 @foreach (var element in ViewBag.Comments)
                 {
                     <tr>
-                        <td style="border-top:1px solid grey; border-left:1px solid grey; border-right:1px solid grey">@Html.ActionLink($"{element.UsName}", "GetProfile", "Profile", new { Id = element.UsId }, null)</td>
+                        <td style="border-top:1px solid grey; border-left:1px solid grey; border-right:1px solid grey; font-size: 18px; padding:5px;">@Html.ActionLink($"{element.UsName}", "GetProfile", "Profile", new { Id = element.UsId }, null)</td>
                     </tr>
                     <tr>
-                        <td style="border-left:1px solid grey; border-right:1px solid grey">@element.Comment</td>
+                        <td style="border-left:1px solid grey; border-right:1px solid grey; padding: 5px">@element.Comment</td>
                     </tr>
                     <tr>
-                        <td style="color:grey; border-left:1px solid grey; border-right:1px solid grey; border-bottom:1px solid grey">
+                        <td style="color:grey; padding-left: 5px; border-left:1px solid grey; border-right:1px solid grey; border-bottom:1px solid grey">
                             @element.DatePublish
-                            @*@if (element.UsId == ViewBag.YourId)
-                    {
-                        <button name="action" style="color:black" value="DeleteComment" id="@element.Id">Удалить</button>
-                    }*@
                         </td>
                     </tr>
                     <tr>
@@ -85,42 +81,12 @@
             </table>
             @*Тут какая-то херня с шириной*@
             @if (User.Identity.IsAuthenticated) { 
-            <textarea style="width:90%; height:61px; resize:none"  placeholder="Введите комментарий макс. 100 символов" maxlength="100" name="txtArea">
-                            </textarea>
-            <button name="action" value="Comment">Отправить</button>
+            <textarea style="width:90%; height:61px; resize:none"  placeholder="Введите комментарий макс. 100 символов" maxlength="100" name="txtArea"></textarea>
+            <button name="action" value="Comment" style="margin-left: 5px;">Отправить</button>
             }
         </div>
     </div>
 </div>
 }
-@*<table>
-    <tr>
-        @foreach (var item in ViewBag.Document)
-        {
-            <td>@item.Texts</td>
-            <td>Понравилось @item.Likes</td>
-            <td>Не понравилось @item.Dislikes</td>
-            <td>В избранном @item.Favorites</td>
-            <td>Дата публикации - @item.DatePublish</td>
-            <td>Вступление в силу @item.DateStart</td>
-            <td>Дата окончания действия  @item.DateEnd</td>
-        }
-    </tr>
-    </table>
 
-<table>
-    <tr>
-        @foreach (var item in ViewBag.Comments)
-        {
-            <td>@item.Id</td>
-            <td>Заголовок документа @item.Title</td>
-            <td>UsId @item.UsId</td>
-            <td>UsName @item.UsName</td>
-            <td>Comment @item.Comment</td>
-            <td>Понравилось @item.Likes</td>
-            <td>Не понравилось @item.Dislikes</td>
-            <td>Дата публикации - @item.DatePublish</td>
-        }
-    </tr>
-</table>*@
 

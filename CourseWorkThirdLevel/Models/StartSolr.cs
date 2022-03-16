@@ -11,9 +11,16 @@ namespace CourseWorkThirdLevel.Models
     {
         public static void StartEngine()
         {
-            Console.WriteLine(Environment.NewLine + "- Starting Solr");
-            Startup.Init<Document>("http://localhost:8983/solr/Course3");
-            ISolrOperations<Document> solr = ServiceLocator.Current.GetInstance<ISolrOperations<Document>>();
+            try
+            {
+                Console.WriteLine(Environment.NewLine + "- Starting Solr");
+                Startup.Init<Document>("http://localhost:8983/solr/Course3");
+                ISolrOperations<Document> solr = ServiceLocator.Current.GetInstance<ISolrOperations<Document>>();
+            }
+            catch
+            {
+                Console.WriteLine(Environment.NewLine + "- Solr already started");
+            }
         }
     }
 }

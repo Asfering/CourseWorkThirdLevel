@@ -16,20 +16,20 @@
                 }
             </table>
         </div>
-        <div class="col-md-7">
+        <div class="col-md-8">
             <table style="width:90%">
                 <caption>Комментарии @ViewBag.YourName</caption>
 
                 @foreach (var element in ViewBag.DocComments)
                 {
                     <tr>
-                        <td style="border-top:1px solid grey; border-left:1px solid grey; border-right:1px solid grey">@Html.ActionLink($"{element.Title}", "GetDocument", "Document", new { Id = element.Id }, null)</td>
+                        <td style="border-top: 1px solid grey; border-left: 1px solid grey; padding: 5px; border-right: 1px solid grey; font-size: 18px">@Html.ActionLink($"{element.Title}", "GetDocument", "Document", new { Id = element.Id }, null)</td>
                     </tr>
                     <tr>
-                        <td style="border-left:1px solid grey; border-right:1px solid grey">@element.Comment</td>
+                        <td style="border-left: 1px solid grey; padding: 5px; border-right: 1px solid grey">@element.Comment</td>
                     </tr>
                     <tr>
-                        <td style="color:grey; border-left:1px solid grey; border-right:1px solid grey; border-bottom:1px solid grey">@element.DatePublish</td>
+                        <td style="color:grey; border-left:1px solid grey;padding-left:5px; border-right:1px solid grey; border-bottom:1px solid grey">@element.DatePublish</td>
                     </tr>
                     <tr>
                         <td>&nbsp;</td>
@@ -37,15 +37,15 @@
                     }
             </table>
         </div>
-        <div class="col-md-3">
-            <table style="width:100%; border: 1px solid grey">
+        <div class="col-md-2">
+            <table>
                 <caption>Понравилось</caption>
                 @foreach(var element in ViewBag.DocEvaluations)
                 {
                     <tr>
                         @if (element.LikeUnlike) 
                         {
-                            <td style="border: 1px solid grey">@Html.ActionLink($"{ element.Title}", "GetDocument", "Document", new { Id = element.Id }, null);</td>
+                            <td>@Html.ActionLink($"{ element.Title}", "GetDocument", "Document", new { Id = element.Id }, null)</td>
                         }
                     </tr>
                 }

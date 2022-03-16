@@ -23,7 +23,7 @@ namespace CourseWorkThirdLevel
             this.Evaluations = new HashSet<Evaluation>();
         }
     
-        [SolrUniqueKey("Id")]
+        [SolrUniqueKey("IdDoc")]
         public int Id { get; set; }
         [SolrField("Title")]
         public string Title { get; set; }

@@ -10,6 +10,7 @@ namespace CourseWorkThirdLevel.Controllers
     {
         Kurs3Entities ent = new Kurs3Entities();
 
+        [HttpGet]
         public ActionResult Index()
         {
             User user = null;
@@ -19,6 +20,28 @@ namespace CourseWorkThirdLevel.Controllers
                 ViewBag.Id = user.Id;
             }
             return View();
+        }
+
+        [HttpPost]
+        public ActionResult Index(string action, string FindDoc, System.DateTime? DateStart, System.DateTime? DateEnd, bool? checkBoxActual)
+        {
+            try
+            {
+                if (action == "Search")
+                {
+                    if(DateEnd != null && DateStart != null && (DateEnd < DateStart || DateStart > DateEnd))
+                    {
+                        return RedirectToAction("AllDocuments", "Document", new { FindDoc = FindDoc, checkBoxActual = checkBoxActual });
+                    }
+                    return RedirectToAction("AllDocuments", "Document", new { FindDoc = FindDoc, DateStart = DateStart, DateEnd = DateEnd, checkBoxActual = checkBoxActual });
+                }
+                return RedirectToAction("Index", "Home");
+            }
+            catch
+            {
+                return RedirectToAction("Index", "Home");
+            }
+            
         }
 
         [Authorize]

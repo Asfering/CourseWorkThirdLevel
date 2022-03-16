@@ -1,18 +1,105 @@
 ﻿
 @{
-    ViewBag.Title = "Результаты";
+    ViewBag.Title = ViewBag.FindDoc;
 }
 
-<h2>Результаты</h2>
 
-<table>
-    <td>
-        @foreach (var item in ViewBag.Document)
-        {
-        <tr>@Html.ActionLink($"{item.Title}", "GetDocument", "Document", new { Id = item.Id }, null)</tr>
-        <tr>Вступление в силу @item.DateStart</tr>
-        <tr>Дата окончания действия  @item.DateEnd</tr>
-    }
-        </td>
-    </table>
+@using (Html.BeginForm("AllDocuments", "Document", FormMethod.Post))
+{
+    @*Поисковик*@
+    <div style="height:100%">
+        <div class="container">
+            <div class="row d-flex justify-content-center align-items-center" style="height:max-content">
+                <div class="col-md-12">
 
+                    <div class="search">
+                        <i class="fa fa-search"></i> <input type="text" style="margin-top:20px" class="f-control" placeholder="Найти документ..." name="FindDoc" value="@ViewBag.FindDoc">
+                        <button class="btn btn-primary" type="submit" name="action" value="Search">Поиск</button>
+                    </div>
+                </div>
+            </div>
+            <div class="row d-flex justify-content-center align-items-center" style="margin-top:15px; margin-bottom:20px">
+                <div class="col-md-2">
+                    <i class="fa fa-search"></i> <input type="text" onfocus="(this.type='date')" class="f-control" placeholder="Дата от" value="@ViewBag.DateStart" name="DateStart" min="1900-01-01" max="2030-12-31">
+                </div>
+                <div class="col-md-2">
+                    <i class="fa fa-search"></i> <input type="text" onfocus="(this.type='date')" class="f-control" placeholder="Дата до" value="@ViewBag.DateEnd" name="DateEnd" min="1900-01-01" max="2030-12-31">
+                </div>
+                <div class="col-md-4">
+                    @Html.CheckBox("checkBoxActual", (bool)ViewBag.CheckBox) <span>Только актуальные</span>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+
+@* Он же Search *@
+<div class="container">
+    <div class="row">
+        <div class="col-md-12">
+            <table style="width:100%">
+                @*Берем данные из костыля, где нет DateEnd*@
+                @foreach (var element in ViewBag.DocumentCrutch)
+                {
+                    <tr>
+                        <td style="border-top:1px solid grey; padding:5px; border-left:1px solid grey; border-right:1px solid grey; font-size:18px">@Html.ActionLink($"{element.Title}", "GetDocument", "Document", new { Id = element.Id }, null)</td>
+                    </tr>
+                    <tr>
+                        <td style="border-left: 1px solid grey; padding: 5px; border-right: 1px solid grey">@element.Texts.Substring(0, Math.Min(@element.Texts.Length, 190))</td>
+                    </tr>
+
+                    if (element.DateEnd != null)            // Если DateEnd существует
+                    {
+                        <tr>
+                            <td style="color: grey; border-left: 1px solid grey; padding-left: 5px; border-right: 1px solid grey">Дата вступления в силу: @element.DateStart</td>
+                        </tr>
+                        <tr>
+                            <td style="color: grey; border-left: 1px solid grey; padding-left: 5px; border-right: 1px solid grey; border-bottom: 1px solid grey">Дата утраты силы: @element.DateEnd</td>
+                        </tr>
+                    }
+                    else                                    // Иначе
+                    {
+                        <tr>
+                            <td style="color: grey; border-left: 1px solid grey; padding-left: 5px; border-right: 1px solid grey; border-bottom: 1px solid grey">Дата вступления в силу: @element.DateStart</td>
+                        </tr>
+                    }
+                    <tr>
+                        <td>&nbsp;</td>
+                    </tr>
+                }
+                @*// Берем данные из обычных доков, где есть DateEnd или запрос несложный*@
+                @foreach (var element in ViewBag.Document)
+                {
+                    <tr>
+                        <td style="border-top:1px solid grey; padding:5px; border-left:1px solid grey; border-right:1px solid grey; font-size:18px">@Html.ActionLink($"{element.Title}", "GetDocument", "Document", new { Id = element.Id }, null)</td>
+                    </tr>
+                    <tr>
+                        <td style="border-left: 1px solid grey; padding: 5px; border-right: 1px solid grey">@element.Texts.Substring(0, Math.Min(@element.Texts.Length, 190))</td>
+                    </tr>
+
+                    if (element.DateEnd != null)    // Если DateEnd существует
+                    {
+                        <tr>
+                            <td style="color: grey; border-left: 1px solid grey; padding-left: 5px; border-right: 1px solid grey">Дата вступления в силу: @element.DateStart</td>
+                        </tr>
+                        <tr>
+                            <td style="color: grey; border-left: 1px solid grey; padding-left: 5px; border-right: 1px solid grey; border-bottom: 1px solid grey">Дата утраты силы: @element.DateEnd</td>
+                        </tr>
+                    }
+                    else                            // Иначе
+                    {
+                        <tr>
+                            <td style="color: grey; border-left: 1px solid grey; padding-left: 5px; border-right: 1px solid grey; border-bottom: 1px solid grey">Дата вступления в силу: @element.DateStart</td>
+                        </tr>
+                    }
+                    <tr>
+                        <td>&nbsp;</td>
+                    </tr>
+                }
+
+            </table>
+        </div>
+
+    </div>
+</div>
