@@ -33,24 +33,33 @@ namespace CourseWorkThirdLevel.Controllers
                 StartSolr.StartEngine();        // подрубаем Solr
                 ISolrOperations<Document> solr = ServiceLocator.Current.GetInstance<ISolrOperations<Document>>();
 
+                if(FindDoc == null)
+                {
+                    return RedirectToAction("Index", "Home");
+                }
+
                 // тут надо сделать форич, который будет брать входящую строку, делить на слова и добавлять в запрос.
                 string[] words = FindDoc.Split(new char[] { ' ', ',', '!', '.', '-', ';', ':', '—', '-' }, StringSplitOptions.RemoveEmptyEntries);
-                string temp = "";
+                string tempText = "";
+                string tempTitle = "";
                 foreach (var item in words)
                 {
                     if (item != words[words.Length - 1])
                     {
-                        temp += $"{item} and ";
+                        tempText += $"Texts: {item} and ";
+                        tempTitle += $"Title: {item} and ";
                     }
-                    else
+                    else if (words.Length == 1 || item == words[words.Length - 1])
                     {
-                        temp += $"{item}";
+                        tempText += $"Texts: {item}";
+                        tempTitle += $"Title: {item}";
                     }
                 }
 
                 SolrQueryResults<Document> document = new SolrQueryResults<Document>();
                 SolrQueryResults<Document> documentCrutch = new SolrQueryResults<Document>();
 
+                
                 //ДОДЕЛАТЬ!
                 if (DateStart == null)
                 {
@@ -59,11 +68,11 @@ namespace CourseWorkThirdLevel.Controllers
                         if (checkBoxActual == false)         // даты начала нет, даты конца нет, все актуальности
                         {
                             // верно
-                            document = solr.Query($"Texts: {temp} and Title: {temp}");          // беру всю выборку
+                            document = solr.Query($"{tempText} and {tempTitle}");          // беру всю выборку
                         }
                         else                                // даты начала нет, даты конца нет, актуальность
                         {
-                            document = solr.Query($"Texts: {temp} and Title: {temp}", new QueryOptions
+                            document = solr.Query($"{tempText} and {tempTitle}", new QueryOptions
                             {
                                 FilterQueries = new ISolrQuery[]
                                 {
@@ -78,7 +87,7 @@ namespace CourseWorkThirdLevel.Controllers
                     {
                         if (checkBoxActual == false)                 // даты начала нет, дата конца есть, все актуальности
                         {
-                            document = solr.Query($"Texts: {temp} and Title: {temp}", new QueryOptions
+                            document = solr.Query($"{tempText} and {tempTitle}", new QueryOptions
                             {
                                 FilterQueries = new ISolrQuery[]
                                 {
@@ -86,7 +95,7 @@ namespace CourseWorkThirdLevel.Controllers
                                 new SolrQuery($"DateEnd: [* TO {DateEnd.Value.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture)}T{DateEnd.Value.TimeOfDay}Z]")           // Беру левую часть от Даты конца
                                 }
                             });
-                            documentCrutch = solr.Query($"Texts: {temp} and Title: {temp}", new QueryOptions
+                            documentCrutch = solr.Query($"{tempText} and {tempTitle}", new QueryOptions
                             {
                                 FilterQueries = new ISolrQuery[]
                                {
@@ -97,7 +106,7 @@ namespace CourseWorkThirdLevel.Controllers
                         }
                         else                                        // даты начала нет, дата конца есть, актуальность
                         {
-                            document = solr.Query($"Texts: {temp} and Title: {temp}", new QueryOptions
+                            document = solr.Query($"{tempText} and {tempTitle}", new QueryOptions
                             {
                                 FilterQueries = new ISolrQuery[]
                                 {
@@ -105,7 +114,7 @@ namespace CourseWorkThirdLevel.Controllers
                                 new SolrQuery("DateStart: [* TO NOW]")      // Беру левую часть от Now
                                 }
                             });
-                            documentCrutch = solr.Query($"Texts: {temp} and Title: {temp}", new QueryOptions
+                            documentCrutch = solr.Query($"{tempText} and {tempTitle}", new QueryOptions
                             {
                                 FilterQueries = new ISolrQuery[]
                                 {
@@ -122,7 +131,7 @@ namespace CourseWorkThirdLevel.Controllers
                     {
                         if (checkBoxActual == false)         // дата начала есть, даты конца нет, все актуальности
                         {
-                            document = solr.Query($"Texts: {temp} and Title: {temp}", new QueryOptions
+                            document = solr.Query($"{tempText} and {tempTitle}", new QueryOptions
                             {
                                 FilterQueries = new ISolrQuery[]
                                 {
@@ -133,7 +142,7 @@ namespace CourseWorkThirdLevel.Controllers
                         }
                         else                                // дата начала есть, даты конца нет, актуальность
                         {
-                            document = solr.Query($"Texts: {temp} and Title: {temp}", new QueryOptions
+                            document = solr.Query($"{tempText} and {tempTitle}", new QueryOptions
                             {
                                 FilterQueries = new ISolrQuery[]
                                {
@@ -148,7 +157,7 @@ namespace CourseWorkThirdLevel.Controllers
                     {
                         if (checkBoxActual == false)                 // дата начала есть, дата конца есть, все актуальности
                         {
-                            document = solr.Query($"Texts: {temp} and Title: {temp}", new QueryOptions
+                            document = solr.Query($"{tempText} and {tempTitle}", new QueryOptions
                             {
                                 FilterQueries = new ISolrQuery[]
                                {
@@ -157,7 +166,7 @@ namespace CourseWorkThirdLevel.Controllers
                                 new SolrQuery($"DateEnd: [* TO {DateEnd.Value.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture)}T{DateEnd.Value.TimeOfDay}Z]")               // Беру левую часть от конца
                                }
                             });
-                            documentCrutch = solr.Query($"Texts: {temp} and Title: {temp}", new QueryOptions
+                            documentCrutch = solr.Query($"{tempText} and {tempTitle}", new QueryOptions
                             {
                                 FilterQueries = new ISolrQuery[]
                                {
@@ -168,7 +177,7 @@ namespace CourseWorkThirdLevel.Controllers
                         }
                         else                                            // дата начала есть, дата конца есть, актуальность
                         {
-                            document = solr.Query($"Texts: {temp} and Title: {temp}", new QueryOptions
+                            document = solr.Query($"{tempText} and {tempTitle}", new QueryOptions
                             {
                                 FilterQueries = new ISolrQuery[]
                                {
@@ -177,7 +186,7 @@ namespace CourseWorkThirdLevel.Controllers
                                 new SolrQuery($"DateStart: [{DateStart.Value.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture)}T{DateStart.Value.TimeOfDay}Z TO NOW]")   // Беру левую часть от Now
                                }
                             });
-                            documentCrutch = solr.Query($"Texts: {temp} and Title: {temp}", new QueryOptions
+                            documentCrutch = solr.Query($"{tempText} and {tempTitle}", new QueryOptions
                             {
                                 FilterQueries = new ISolrQuery[]
                                 {
@@ -343,6 +352,10 @@ namespace CourseWorkThirdLevel.Controllers
                 // Для наглядности использую 3 разных метода работы. SQL запрос, LINQ и обычные Joinы в Entity.
                 User user = Entity.Users.Where(u => u.UserLogin == User.Identity.Name).FirstOrDefault();        // получаем текущего пользователя
                 var document = Entity.Documents.SqlQuery($"Select * from Documents Where Id = {id}").ToList();      // вся инфа о документе
+                if(document.Count == 0)
+                {
+                    return RedirectToAction("Error404", "Error");
+                }
                 var docComments = from doc in Entity.Documents
                                   join comments in Entity.Comments on doc.Id equals comments.IdDocument
                                   join users in Entity.Users on comments.IdUser equals users.Id

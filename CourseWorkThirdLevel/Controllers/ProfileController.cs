@@ -27,6 +27,10 @@ namespace CourseWorkThirdLevel.Controllers
                     // Сделать проверку, является ли ID числом. И так везде!
 
                     var currentUser = ent.Users.SqlQuery($"Select * from Users where Users.Id = {id}").ToList();
+                    if(currentUser.Count == 0)
+                    {
+                        return RedirectToAction("Error404", "Error");
+                    }
                     // Достаем понравившиеся пользователю документы
                     var docFavorites = ent.Database.SqlQuery<Document>($"Select * from Documents inner join Favorites on Favorites.IdDocument = Id where Favorites.IdUser = {id}").ToList();
                     // Достает оценки пользователя

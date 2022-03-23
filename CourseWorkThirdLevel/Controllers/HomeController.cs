@@ -47,7 +47,7 @@ namespace CourseWorkThirdLevel.Controllers
         [Authorize]
         public ActionResult About()
         {
-            ViewBag.Message = "Your application description page.";
+            ViewBag.Message = "Курсовая работа Решетняка Р.М. ASP.NET + Solr. По всем вопросам - roma_r9@mail.ru";
 
             return View();
         }

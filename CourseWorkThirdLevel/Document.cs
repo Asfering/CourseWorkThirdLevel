@@ -22,7 +22,7 @@ namespace CourseWorkThirdLevel
             this.Favorites1 = new HashSet<Favorite>();
             this.Evaluations = new HashSet<Evaluation>();
         }
-    
+
         [SolrUniqueKey("IdDoc")]
         public int Id { get; set; }
         [SolrField("Title")]
@@ -41,7 +41,7 @@ namespace CourseWorkThirdLevel
         public Nullable<System.DateTime> DateEnd { get; set; }
         [SolrField("Favorites")]
         public Nullable<int> Favorites { get; set; }
-    
+
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Comment> Comments { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]

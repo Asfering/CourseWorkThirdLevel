@@ -271,6 +271,7 @@
     </Compile>
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\DocumentController.cs" />
+    <Compile Include="Controllers\ErrorController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ProfileController.cs" />
     <Compile Include="DbWork.Context.cs">
@@ -372,6 +373,7 @@
     <Content Include="Views\Profile\GetProfile.cshtml" />
     <Content Include="Views\Document\AllDocuments.cshtml" />
     <Content Include="Views\Document\GetDocument.cshtml" />
+    <Content Include="Views\Error\Error404.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

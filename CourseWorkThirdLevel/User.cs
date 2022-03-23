@@ -21,7 +21,7 @@ namespace CourseWorkThirdLevel
             this.Evaluations = new HashSet<Evaluation>();
             this.Favorites = new HashSet<Favorite>();
         }
-
+    
         public int Id { get; set; }
         public string UserLogin { get; set; }
         public string UserPassword { get; set; }
